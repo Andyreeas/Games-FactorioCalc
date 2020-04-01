@@ -9,5 +9,7 @@ DB with XML or JSON
 evt. GUI or simple CLI
 
 ## Calculations
+# Assembling time
 Time to craft an Item include efficiency/ speed/ productivity modules
 
+Number of assemblers needed to fill the Belt (#Assembling time)
