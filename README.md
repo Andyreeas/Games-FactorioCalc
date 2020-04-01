@@ -11,4 +11,4 @@ evt. GUI or simple CLI
 ## Calculations
 Time to craft an Item include efficiency/ speed/ productivity modules
 
-Number of assemblers needed to fill the Belt (#Assembling time)
+Number of assemblers needed to fill the Belt (#Assembling time) or empty the source
