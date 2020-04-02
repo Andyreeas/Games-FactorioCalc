@@ -9,6 +9,8 @@ DB for Factorio recipies
 extract from Factorio with lua command:
 From lua/extract_recipies.lua
 
+source(https://www.reddit.com/r/factorio/comments/69h6wd/question_recipes_data/)
+
 ## Results
 C:\Users\YOUR_NAME\AppData\Roaming\Factorio\script-output\recipies.txt
 
