@@ -3,16 +3,17 @@
 Factorio Calculator
 
 # Backend
+DB for Factorio recipies
 
 ## DB .txt file
 extract from Factorio with lua command:
 
-/silent-command
+/silent-command 
 game.player.force.enable_all_recipes()
 game.player.force.enable_all_technologies()
 game.player.force.research_all_technologies(1)
 
-/silent-command
+/silent-command 
 listresources = {}
 for a, b in pairs(game.player.force.recipes) do
     item = b.name .. " @ " .. b.energy .. " seconds @ Produces : "
