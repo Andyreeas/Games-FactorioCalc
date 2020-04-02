@@ -1,7 +1,7 @@
 # Games-FactorioCalc
 
 Factorio Calculator
-
+![Image of Yaktocat](https://octodex.github.com/images/homercat.png)
 # Backend
 DB for Factorio recipies
 
