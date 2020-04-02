@@ -22,20 +22,22 @@ class Application(tk.Frame):
         self.choices = [ 'Pizza','Lasagne','Fries','Fish','Potatoe']
         self.dropvar = tk.StringVar() #Erzeugt eine Variable nutzbar für tk
         self.dropvar.set(self.choices[0]) # set setzt die Variable, .get liest sie aus, zv bei OptionMenu
-        self.dropvar.trace("w", self.read_list) #.trace r/w/u für read/write/undefine, callback muss eine funktion sein
         self.textvar = tk.StringVar()
-        self.textvar = self.dropvar.get()
+        self.dropvar.trace("w", self.read_list) #.trace r/w/u für read/write/undefine, callback muss eine funktion sein
+        
+        
+
 
 #        self.choices = [ 'Pizza','Lasagne','Fries','Fish','Potatoe']
 #        self.textvar = tk.StringVar() 
 #        self.dropvar.set(self.choices[0]) 
 
 
-    def read_list(self):
-        self.textvar = self.dropvar.get()
-        print(textvar)
-        
-        
+    def read_list(self,*args):
+        self.textvar.set(self.dropvar.get())
+        print(self.textvar.get())
+
+
 
     def create_widgets(self):
         self.text1 = tk.Label(self, text="Text hier !").grid(row = 1, column = 1, sticky="e")
@@ -58,13 +60,15 @@ class Application(tk.Frame):
 #        self.DropMenu.pack(side="left")
         
 
-        self.text2 = tk.Label(self, text=self.textvar).grid(row = 2, column = 2, sticky="e")
+        self.text2 = tk.Label(self, textvariable=self.textvar).grid(row = 2, column = 2, sticky="e")
 
 
         self.quit = tk.Button(self, text="QUIT", fg="red",
                               command=self.master.destroy)
         self.quit.grid(row = 3, column = 3,sticky="e")
 #        self.quit.pack(side="left")
+
+    def 
 
 
     def say_hi(self):
