@@ -12,7 +12,7 @@ class Application(tk.Frame):
         self.grid(column=2,row=3, sticky=tk.N+tk.S+tk.E+tk.W ) #erzeugt ein mastergrid
         self.columnconfigure(0, weight = 1) #grid setting
         self.rowconfigure(0, weight = 1) #grid setting
-        self.pack(pady = 100, padx = 100) #pady/x = Minimum grösse
+        self.pack(pady = 100, padx = 100) #pady/x = Pixels ausserhalb hinzigefügt werden
 
 #        self.pack()
         self.create_variables()
