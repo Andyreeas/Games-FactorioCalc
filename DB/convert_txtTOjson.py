@@ -10,6 +10,7 @@ import json
 # the file to be converted 
 file = 'recipiesConverted.txt'
 
+dict = {}
 dict01 = {}
 dict02 = {} 
 dict03 = {} 
@@ -55,8 +56,9 @@ with open(file) as f:
         na = dict02['item']
         # Enter Json Object with item Name
         dict01[na]= dict02
-        
+
+dict['Items'] = dict01    
 # Write Dictionary into Json
 out_file = open("data.json", "w")
-json.dump(dict01, out_file)
+json.dump(dict, out_file)
 out_file.close()
