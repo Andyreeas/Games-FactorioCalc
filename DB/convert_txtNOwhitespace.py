@@ -6,24 +6,26 @@ Created on Fri Apr  3 11:00:10 2020
 """
 
 fileToSearch  = 'recipies.txt'
-
-textToSearch = ' @ '
-# textToSearch02 = ''
-# textToSearch03 = ''
-
-textToReplace = ','
-# textToReplace02 = ''
-# textToReplace03 = ''
+i = 0
 
 with open(fileToSearch) as a:
     for line in a:
-        if textToSearch in line :
-            print('Match Found')
-            out_file = open("recipies.txt", "w")
-            out_file.write(line.replace(textToSearch, textToReplace))
-            out_file.close()
-        else:
-            print('Match Not Found!!')
+        temp = list(line.strip().split('@'))
         
-fileToSearch.close()
+        text = line.replace(' ','')
+        text = text.replace('@',',')
+        text = text.replace('seconds','')
+        text = text.replace('Produces:','')
+        
+        na = str(':' + temp[0])
+        na = na.replace(' ','')
+            
+        text = text.replace(na,'')
+        text = text.replace(',,',',')
+        text = text.replace(':',',')
+        text = text[:-2]
+        text = text + '\n'
 
+        out_file = open('recipiesConverted.txt', 'a+')
+        out_file.write(text)
+        out_file.close()
