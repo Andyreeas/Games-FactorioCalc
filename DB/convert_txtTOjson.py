@@ -7,12 +7,8 @@ Created on Thu Apr  2 22:29:01 2020
 
 import json 
   
-  
 # the file to be converted 
 file = 'recipies.txt'
-
-out_file = open("data.json", "w") 
-out_file.close()
 
 dict02 = {} 
 dict01 = {} 
@@ -24,16 +20,20 @@ with open(file) as f:
         # loop for one line (reset)
         i = 0
         # reading line by line from the text file 
-        # separator ,
+        # separator @
         temp = list( line.strip().split('@'))
         # reset dict02
         dict02 = {}
         while i < len(fields): 
-            # creating dictionary for each employee 
             dict02[fields[i]]= temp[i] 
             i = i + 1
+        # Create Json Object with item Name
         na = dict02['item']
+        # Enter Json Object with item Name
         dict01[na]= dict02
+        # Write entry into Json
         out_file = open("data.json", "w")
         json.dump(dict01, out_file)
         out_file.close()
+
+
