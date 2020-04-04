@@ -36,8 +36,12 @@ class calcs():
     def get_allItemNames(self):
         list = []
         for i in self.data['Items']:
+<<<<<<< HEAD
             list.append(i)
         return list
+=======
+            return i
+>>>>>>> 8ab945ee5774488c5e7222d6e6731fa2d4a25d6e
             
 calc = calcs()
 #print(calc.readJson())

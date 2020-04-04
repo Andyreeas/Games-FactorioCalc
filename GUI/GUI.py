@@ -1,4 +1,13 @@
-import tkinter as tk
+# Import GUI
+import tkinter as tk 
+#Extend Path, for Importing Module in Parent
+import os,sys,inspect
+current_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+parent_dir = os.path.dirname(current_dir)
+sys.path.insert(0, parent_dir) 
+# Import from folder calcs
+import calcs 
+
 #Doku:
 # https://docs.python.org/3/library/tkinter.html#tkinter-basic-mapping
 # ref https://web.archive.org/web/20190524140835/https://infohost.nmt.edu/tcc/help/pubs/tkinter/web/index.html
@@ -19,6 +28,7 @@ class Application(tk.Frame):
 
 
     def load_variables(self):
+
         self.db_list = [ 'Pizza','Lasagne','Fries','Fish','Potatoe']
 #        self.choices = [ 'Pizza','Lasagne','Fries','Fish','Potatoe']
         self.choices = self.db_list
@@ -26,7 +36,9 @@ class Application(tk.Frame):
         self.list_dropvar = []
         self.list_dropmenu = []
         self.list_textvar = []
-        
+
+        print(calcs().get_allItemNames())
+
         self.search_key = tk.StringVar()
         self.listcount = 1
         
@@ -68,7 +80,7 @@ class Application(tk.Frame):
         except:
             self.list_dropvar[-1].set("Kein Eintrag")
 #        self.list_dropvar[-1].trace("w", self.read_list(count=self.listcount)) #.trace r/w/u für read/write/undefine, callback muss eine funktion sein
-        self.list_dropmenu.append(tk.OptionMenu(self.menue_top, self.list_dropvar[-1],*self.choices if not self.choices == [] else "0" )) #args: erstauswahl, liste. * für Einträge aus liste
+        self.list_dropmenu.append(tk.OptionMenu(self.menue_top, self.list_dropvar[-1],*self.choices if not self.choices == [] else "" )) #args: erstauswahl, liste. * für Einträge aus liste
         self.list_dropmenu[-1].grid(row = self.listcount, column = 1,sticky="w")
         print(self.list_dropvar[-1])
         
