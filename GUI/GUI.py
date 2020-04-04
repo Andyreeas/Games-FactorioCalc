@@ -1,7 +1,12 @@
 # Import GUI
 import tkinter as tk 
-
-from ..calcs import calcs
+#Extend Path, for Importing Module in Parent
+import os,sys,inspect
+current_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+parent_dir = os.path.dirname(current_dir)
+sys.path.insert(0, parent_dir) 
+# Import from folder calcs
+import calcs 
 
 #Doku:
 # https://docs.python.org/3/library/tkinter.html#tkinter-basic-mapping
