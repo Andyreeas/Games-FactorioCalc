@@ -6,7 +6,7 @@ current_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentfra
 parent_dir = os.path.dirname(current_dir)
 sys.path.insert(0, parent_dir) 
 # Import from folder calcs
-import calcs 
+from calcs import calcs
 
 #Doku:
 # https://docs.python.org/3/library/tkinter.html#tkinter-basic-mapping
@@ -29,35 +29,44 @@ class Application(tk.Frame):
 
     def load_variables(self):
 
-        self.db_list = [ 'Pizza','Lasagne','Fries','Fish','Potatoe']
+        self.db_list = calcs.calcs().get_allItemNames()
 #        self.choices = [ 'Pizza','Lasagne','Fries','Fish','Potatoe']
         self.choices = self.db_list
-        self.list_text = [] #Eintrag [0] ist text1
-        self.list_dropvar = []
-        self.list_dropmenu = []
-        self.list_textvar = []
 
-        print(calcs().get_allItemNames())
+        self.list_dropvar = [] 
+        self.list_dropmenu = [] #Eintrag [0] ist dropvar2
+        self.list_textvar = []
+        self.list_item_time = []
+        self.list_item_time_var = []
+
+        
 
         self.search_key = tk.StringVar()
-        self.listcount = 1
+        self.listcount = 2
         
         
 
     def create_widgets(self):
+
+        #Beschriftung
+        self.text_time = tk.Label(self.menue_top, text="Time").grid(row = 1, column = 2, sticky="e")
+
         self.add_line() #initial line
 
         textsuche = tk.Label(self.menue_top, text=("Suche:")).grid( row = 0, column = 3, sticky="w")
         self.searchbox = tk.Entry(self.menue_top, textvariable=self.search_key)
         self.searchbox.grid(row = 0, column = 4,sticky="e")
-        self.button_go_search = tk.Button(self.menue_top, text="los finde!", #IMMER SCHÖN MAINFRAME ALS PARENT
+
+        self.button_go_search = tk.Button(self.menue_top, text="Suche in neuer Zeile", #IMMER SCHÖN MAINFRAME ALS PARENT
                               command=self.search_engine)
-        self.button_go_search.grid(row = 0, column = 6,sticky="e")
+        self.button_go_search.grid(row = 0, column = 5,sticky="e")
 
-        self.add_row = tk.Button(self.menue_top, text="Neue Zeile", #IMMER SCHÖN MAINFRAME ALS PARENT
-                              command=self.add_line)
-        self.add_row.grid(row = 0, column = 1,sticky="e")
-
+#        self.add_row = tk.Button(self.menue_top, text="Neue Zeile", #IMMER SCHÖN MAINFRAME ALS PARENT
+#                              command=self.add_line)
+#        self.add_row.grid(row = 0, column = 5,sticky="e")
+        self.button_del_row = tk.Button(self.menue_top, text="Lezte Zeile löschen", fg="red", #IMMER SCHÖN MAINFRAME ALS PARENT
+                              command=self.del_line)
+        self.button_del_row.grid(row = 0, column = 6,sticky="e")
 
 
 
@@ -71,21 +80,37 @@ class Application(tk.Frame):
         
 
     def add_line(self):
-        self.list_text.append(tk.Label(self.menue_top, text=("text",self.listcount)).grid( row = self.listcount, column = 2, sticky="w"))
 
-        #Erstellt das Dropdown menu für jede Zeile. #Eintrag [0] ist text1 (self.listcount: 1). 
         self.list_dropvar.append(tk.StringVar())
         try:
             self.list_dropvar[-1].set(self.choices[0])
         except:
             self.list_dropvar[-1].set("Kein Eintrag")
-#        self.list_dropvar[-1].trace("w", self.read_list(count=self.listcount)) #.trace r/w/u für read/write/undefine, callback muss eine funktion sein
+        
+        self.list_item_time_var.append(tk.StringVar())
+        self.list_dropvar[-1].trace("w", self.read_items) #.trace r/w/u für read/write/undefine, callback muss eine funktion sein
+        self.list_item_time.append(tk.Label(self.menue_top, textvariable=self.list_item_time_var[-1]))
+        self.list_item_time[-1].grid( row = self.listcount, column = 2, sticky="w")
+
+        #Erstellt das Dropdown menu für jede Zeile. #Eintrag [0] ist text2 (self.listcount: 2). 
         self.list_dropmenu.append(tk.OptionMenu(self.menue_top, self.list_dropvar[-1],*self.choices if not self.choices == [] else "" )) #args: erstauswahl, liste. * für Einträge aus liste
         self.list_dropmenu[-1].grid(row = self.listcount, column = 1,sticky="w")
         print(self.list_dropvar[-1])
-        
-        self.listcount += 1
-       
+        self.listcount += 2
+    
+
+
+    def read_items(self,*args):
+        self.list_item_time_var[-1].set(calcs.calcs().get_time(self.list_dropvar[-1].get()))
+
+
+
+    def del_line(self):    
+        self.list_text[-1].grid_forget()
+        self.list_text.pop()
+        self.list_dropmenu[-1].grid_forget()
+        self.list_dropmenu.pop()
+
 
     def search_engine(self):
         print("search_engine")
@@ -101,6 +126,7 @@ class Application(tk.Frame):
                     self.choices.append(text)
         else:
             self.choices = self.db_list
+        self.add_line()
                 
 
 #    def read_list(self,*args, count=0):
