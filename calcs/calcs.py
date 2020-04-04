@@ -31,7 +31,7 @@ class calcs():
     
     def get_allItemNames(self):
         for i in self.data['Items']:
-            print(i)
+            return i
             
 calc = calcs()
 #calc.readJson()
