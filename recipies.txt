@@ -1,0 +1,1 @@
+accumulator @ 10 seconds @ Produces : 1:accumulator,  @ Ingredients: 2:iron-plate, 5:battery,

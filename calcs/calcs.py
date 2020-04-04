@@ -37,5 +37,4 @@ calc = calcs()
 #calc.readJson()
 #calc.get_time('uranium-processing')
 #calc.get_amount('uranium-processing')
-
-calc.get_allItemNames()
+#calc.get_allItemNames()
