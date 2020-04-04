@@ -15,26 +15,32 @@ class calcs():
         self.data = json.loads(open(database).read())
 
     def readJson(self):
-        print(self.data)
+        return self.data
 
     def get_time(self, item):
         try:
-            print(self.data['Items'][item]["time"])
+            time = self.data['Items'][item]["time"]
+            return time
         except KeyError:
-            print("Item doesn't exist")
+            error = "Item doesn't exist"
+            return error
     
     def get_amount(self, item):
         try:
-            print(self.data['Items'][item]["amount"])
+            amount = self.data['Items'][item]["amount"]
+            return amount
         except KeyError:
-            print("Item doesn't exist")
+            error = "Item doesn't exist"
+            return error
     
     def get_allItemNames(self):
+        list = []
         for i in self.data['Items']:
-            print(i)
+            list.append(i)
+        return list
             
 calc = calcs()
-#calc.readJson()
-#calc.get_time('uranium-processing')
+#print(calc.readJson())
+#print(calc.get_time('uranium-processing'))
 #calc.get_amount('uranium-processing')
-#calc.get_allItemNames()
+#print(calc.get_allItemNames())
