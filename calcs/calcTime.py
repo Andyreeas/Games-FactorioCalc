@@ -54,13 +54,12 @@ class calcTime():
         '''
         To calculate Time of item with boost
         '''
-        calc = calcTime()
         db = getValues()
         time = int(db.getTime(item))
-        pr = calc.builderPR(builder, module1, module2, module3, module4)
-        boost = calc.beaconBoostPR(number, beamodule1, beamodule2)
-        time = time / (pr * boost)
-        
+        pr = self.builderPR(builder, module1, module2, module3, module4)
+        boost = self.beaconBoostPR(number, beamodule1, beamodule2)
+        pr = builder + (builder * (pr + boost))
+        time = time / pr
         return time
     
     def builderPR(self, builder, module1=0, module2=0, module3=0, module4=0):
@@ -70,9 +69,8 @@ class calcTime():
         @param modules 1 - 4 (Optional)
         return float pr
         '''
-        pr = builder
-        pr = pr + (pr * (module1 + module2 + module3 + module4))
-        return pr
+        prboost = module1 + module2 + module3 + module4
+        return prboost
     
     def beaconBoostPR(self, number, module1=0, module2=0):
         '''
@@ -84,7 +82,7 @@ class calcTime():
         while i < number:
             boost = boost + module1 + module2
             i = i + 1
-        return boost
+        return boost/2
     
     def power():
         '''
@@ -118,10 +116,12 @@ class calcTime():
     # Testing Area
     '''
     def main(self):
-        # print(a.time('advanced-circuit', 'true', self.assembler3))
-        # pr = a.builderPR(self.assembler3, self.sm3v, self.sm3v, self.sm3v, self.sm3v)
-        time = a.time('accumulator', self.assembler3, self.sm3v, self.sm3v, self.sm3v, self.sm3v, 4,self.sm3v, self.sm3v)
+        # print(self.time('advanced-circuit', 'true', self.assembler3))
+        # pr = self.builderPR(self.assembler3, self.sm3v, self.sm3v, self.sm3v, self.sm3v)
+        time = self.time('accumulator', self.assembler3, self.sm3v, self.sm3v, self.sm3v, self.sm3v, 4,self.sm3v, self.sm3v)
+        # boostpr = self.beaconBoostPR(4, self.sm3v, self.sm3v)
         return time
+        # return boostpr
 
 if __name__ == "__main__":
     a = calcTime()
