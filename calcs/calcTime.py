@@ -78,9 +78,9 @@ class calcTime():
     def itemsPerSecond(self, item, builder, smXv1, smXv2, smXv3, smXv4, number, beasmXv1, beasmXv2, pmXp1, pmXp2, pmXp3, pmXp4):
         time = self.time(item, builder, smXv1, smXv2, smXv3, smXv4, number, beasmXv1, beasmXv2)
         amount = self.db.getAmount(item)
-        ipm = float(amount[1]) / time
-        ipm = ipm * self.builderPD(pmXp1, pmXp2, pmXp3, pmXp4)
-        return ipm
+        ips = float(amount[1]) / time
+        ips = ips * self.builderPD(pmXp1, pmXp2, pmXp3, pmXp4)
+        return ips
 
     def time(self, item, builder, smXv1, smXv2, smXv3, smXv4, number, beasmXv1, beasmXv2):
         '''
