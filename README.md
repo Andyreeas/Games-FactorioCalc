@@ -2,6 +2,7 @@
 
 Factorio Calculator
 ![Image of Yaktocat](/images/Factorio_400x400.png)
+
 # Backend
 DB for Factorio recipies
 
@@ -11,14 +12,19 @@ From lua/extract_recipies.lua
 
 source(https://www.reddit.com/r/factorio/comments/69h6wd/question_recipes_data/)
 
-## Results
+###Results:
 C:\Users\YOUR_NAME\AppData\Roaming\Factorio\script-output\recipies.txt
 
+## Convert txt file
+Converting txt file with convert_txtNOwhitespace.py
+
+## Create Json file
+Create Json Database with convert_txtTOjson.py
 
 # Frontend
-evt. GUI or simple CLI
+GUI with Tkinter
 
 ## Calculations
-Time to craft an Item include efficiency/ speed/ productivity modules
-
-Number of assemblers needed to fill the Belt (#Assembling time) or empty the source
+DONE	Time to craft an Item include speed/ productivity modules 
+DONE	Number of assemblers needed to fill the Belt (#Assembling time) 
+DONE	Number of assemblers needed to produce specific Items per Second
