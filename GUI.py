@@ -1,10 +1,10 @@
 # Import
 import tkinter as tk 
 #Extend Path, for Importing Module in Parent
-import os,sys,inspect
-current_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
-parent_dir = os.path.dirname(current_dir)
-sys.path.insert(0, parent_dir) 
+#import os,sys,inspect
+#current_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+#parent_dir = os.path.dirname(current_dir)
+# sys.path.insert(0, parent_dir) 
 # Import from folder calcs
 from calcs import getValues
 from calcs import calcPR
@@ -77,7 +77,7 @@ class Application(tk.Frame):
         # -------------------------------
         # OUTPUT LISTS
            # list_item_time holds all the Label widgets for "time"
-        self.list_item_time = []
+#        self.list_item_time = []
 
         #self.list_ips_out = []
         self.list_fullb = []
@@ -146,8 +146,8 @@ class Application(tk.Frame):
         # updates the text Labels
         #print("updater")
         for i in range(self.listcount -3):
-            self.list_item_time[i].config(text=self.db.getTime(self.list_dropvar[i].get()))
-
+#            self.list_item_time[i].config(text=self.db.getTime(self.list_dropvar[i].get()))
+            self.list_fullb[i].config(text=self.pr.builderFullBelt(45, self.list_dropvar[-1].get(),1.25, 0,0,0,0,0,0,0,0,0,0,0,))
         root.after(500, self.updater)
 
 
@@ -162,8 +162,8 @@ class Application(tk.Frame):
             self.list_dropvar[self.listcount -3].set("Kein Eintrag")
         # -------------------------------
         #Label-Widget for the list_item_time_var
-        self.list_item_time.append(tk.Label(self.menue_top, text=self.db.getTime(self.list_dropvar[-1].get())))
-        self.list_item_time[-1].grid( row = self.listcount, column = 12, sticky="w")
+#        self.list_item_time.append(tk.Label(self.menue_top, text=self.db.getTime(self.list_dropvar[-1].get())))
+#        self.list_item_time[-1].grid( row = self.listcount, column = 12, sticky="w")
         # Creates dropdownmenu. #Eintrag [0] ist text2 (self.listcount: 2)
         self.list_dropmenu.append(tk.OptionMenu(self.menue_top, self.list_dropvar[-1],
                                                 *self.choices if not self.choices == [] else "" ))
@@ -174,15 +174,15 @@ class Application(tk.Frame):
         self.list_speed.append(tk.Entry(self.menue_top, textvariable=self.list_speed_v,width=2).grid(
                                         row = self.listcount, column = 2, sticky="n"))
         self.list_eff.append(tk.StringVar())
-        self.list_eff.append(tk.Entry(self.menue_top, textvariable=self.list_eff,width=2).grid(
+        self.list_eff.append(tk.Entry(self.menue_top, textvariable=self.list_eff_v,width=2).grid(
                                       row = self.listcount, column = 3, sticky="n"))
 
 
         # -------------------------------
         # Output Lists
-        self.list_fullb.append(tk.Label(self.menue_top, text=self.pr.builderFullBelt(45, self.list_dropvar[-1].get(),1.25, 0,0,0,0,0,0,0,0,0,0,0,)).grid(
-                                            row = self.listcount, column = 12, sticky="w"))
-
+        self.list_fullb.append(tk.Label(self.menue_top, text=self.pr.builderFullBelt(45, self.list_dropvar[-1].get(),1.25, 0,0,0,0,0,0,0,0,0,0,0,)))
+                                            
+        self.list_fullb[-1].grid(row = self.listcount, column = 11, sticky="n")
 
         # -------------------------------
         self.listcount += 1

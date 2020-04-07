@@ -7,8 +7,10 @@ Created on Sun Apr  5 01:41:41 2020
 
 
 
-
-from getValues import getValues
+# RelativeImport for GUI
+from .getValues import getValues 
+# Import for local test
+#from getValues import getValues
 
 class calcPR():
     

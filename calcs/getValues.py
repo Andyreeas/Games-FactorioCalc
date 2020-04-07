@@ -16,7 +16,11 @@ class getValues():
     Constructor opens Json DB
     '''
     def __init__(self):
-        database = '../DB/data.json'
+        #Import from GUI
+        database = 'DB/data.json'
+        #Local Text Import
+        #database = '../DB/data.json'
+
         self.data = json.loads(open(database).read())
     
     '''
