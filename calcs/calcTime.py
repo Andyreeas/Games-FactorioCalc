@@ -13,6 +13,10 @@ class calcTime():
     Variabels for Modules
     '''
     def __init__(self):
+        # Connection to DataBase
+        self.db = getValues()
+        
+        # speed-modul (v=speed increas) (e=electricity increas)
         self.sm1v = 0.2
         self.sm1e = 0.5
         self.sm2v = 0.3
@@ -20,22 +24,23 @@ class calcTime():
         self.sm3v = 0.5
         self.sm3e = 0.7
         
+        # electricity-modul (e=electricity increas)
         self.em1e = -0.3
         self.em2e = -0.4
         self.em3e = -0.5
         
+        # productivity-modul (v=speed increas) (e=electricity increas) (p=productivity increas)
         self.pm1v = -0.15
         self.pm1e = 0.4
         self.pm1p = 0.04
-        self.pm1v = -0.15
-        self.pm1e = 0.6
-        self.pm1p = 0.06
-        self.pm1v = -0.15
-        self.pm1e = 0.8
-        self.pm1p = 0.10
+        self.pm2v = -0.15
+        self.pm2e = 0.6
+        self.pm2p = 0.06
+        self.pm3v = -0.15
+        self.pm3e = 0.8
+        self.pm3p = 0.10
         
-        self.beacon = 0.5
-        
+        # production rate
         self.assembler1 = 0.5
         self.assembler2 = 0.75
         self.assembler3 = 1.25
@@ -48,31 +53,58 @@ class calcTime():
         self.furnace1 = 1
         self.furnace2 = 2
         self.efurnace = 2
+        
+        self.yellowBelt = 15
+        self.redBelt = 30
+        self.blueBelt = 45
 
+    def builderAmount(self, itemsneededperMinute, item, builder, smXv1, smXv2, smXv3, smXv4, number, beasmXv1, beasmXv2, pmXp1, pmXp2, pmXp3, pmXp4):
+        '''
+        returns Amount of Builders needed to produce itemsneededperMinute
+        '''
+        ips = self.itemsPerSecond(item, builder, smXv1, smXv2, smXv3, smXv4, number, beasmXv1, beasmXv2, pmXp1, pmXp2, pmXp3, pmXp4)
+        amountBuilder = itemsneededperMinute / (ips * 60)
+        return amountBuilder
+    
+    def builderFullBelt(self, belt, item, builder, smXv1, smXv2, smXv3, smXv4, number, beasmXv1, beasmXv2, pmXp1, pmXp2, pmXp3, pmXp4):
+        '''
+        returns Amount of Builders needed to fill specific Belt
+        param int belt
+        '''
+        ips = self.itemsPerSecond(item, builder, smXv1, smXv2, smXv3, smXv4, number, beasmXv1, beasmXv2, pmXp1, pmXp2, pmXp3, pmXp4)
+        amountBuilder = belt / ips
+        return amountBuilder
+    
+    def itemsPerSecond(self, item, builder, smXv1, smXv2, smXv3, smXv4, number, beasmXv1, beasmXv2, pmXp1, pmXp2, pmXp3, pmXp4):
+        time = self.time(item, builder, smXv1, smXv2, smXv3, smXv4, number, beasmXv1, beasmXv2)
+        amount = self.db.getAmount(item)
+        ipm = float(amount[1]) / time
+        ipm = ipm * self.builderPD(pmXp1, pmXp2, pmXp3, pmXp4)
+        return ipm
 
-    def time(self, item, builder, module1 = 0, module2 = 0, module3 = 0, module4 = 0, number = 0, beamodule1 = 0, beamodule2 = 0):
+    def time(self, item, builder, smXv1, smXv2, smXv3, smXv4, number, beasmXv1, beasmXv2):
         '''
         To calculate Time of item with boost
+        !!! But productivity is not included !!!!
         '''
-        db = getValues()
-        time = int(db.getTime(item))
-        pr = self.builderPR(builder, module1, module2, module3, module4)
-        boost = self.beaconBoostPR(number, beamodule1, beamodule2)
+        time = float(self.db.getTime(item))
+        pr = self.builderPR(builder, smXv1, smXv2, smXv3, smXv4)
+        boost = self.beaconBoostPR(number, beasmXv1, beasmXv2)
         pr = builder + (builder * (pr + boost))
         time = time / pr
         return time
     
-    def builderPR(self, builder, module1=0, module2=0, module3=0, module4=0):
+    def builderPR(self, builder, smXv1, smXv2, smXv3, smXv4):
         '''
         To calculate the Production rate of the builder
         @param builder (assembler, chem plant, usw..)
         @param modules 1 - 4 (Optional)
         return float pr
         '''
-        prboost = module1 + module2 + module3 + module4
+        prboost = smXv1 + smXv2 + smXv3 + smXv4
         return prboost
     
-    def beaconBoostPR(self, number, module1=0, module2=0):
+    def beaconBoostPR(self, number, smXv1, smXv2):
         '''
         To calculate the boost of beacon's
         return float pr%
@@ -80,10 +112,17 @@ class calcTime():
         i = 0
         boost = 0
         while i < number:
-            boost = boost + module1 + module2
+            boost = boost + smXv1 + smXv2
             i = i + 1
         return boost/2
     
+    def builderPD(self, pmXp1, pmXp2, pmXp3, pmXp4):
+        '''
+        To calculate the Productivity of the modules in the builder
+        '''
+        pd = 1 + pmXp1 + pmXp2 + pmXp3 + pmXp4
+        return pd
+        
     def power():
         '''
         TODO --> To calculate the Power usage
@@ -101,12 +140,6 @@ class calcTime():
         TODO --> To calculate the Power usage with Beacon's
         '''
         pass
-    
-    def builderPD():
-        '''
-        TODO --> To calculate the Productivity of the builder
-        '''
-        pass
         
     '''
     # Testing Area
@@ -118,9 +151,12 @@ class calcTime():
     def main(self):
         # print(self.time('advanced-circuit', 'true', self.assembler3))
         # pr = self.builderPR(self.assembler3, self.sm3v, self.sm3v, self.sm3v, self.sm3v)
-        time = self.time('accumulator', self.assembler3, self.sm3v, self.sm3v, self.sm3v, self.sm3v, 4,self.sm3v, self.sm3v)
+        # time = self.time('accumulator', self.assembler3, self.pm3v, self.pm3v, self.pm3v, self.pm3v, 4,self.sm3v, self.sm3v)
+        # ipm = self.itemsPerSecond('accumulator', self.assembler3, self.pm3v, self.pm3v, self.pm3v, self.pm3v, 8,self.sm3v, self.sm3v, self.pm3p, self.pm3p, self.pm3p, self.pm3p)
         # boostpr = self.beaconBoostPR(4, self.sm3v, self.sm3v)
-        return time
+        # ab = self.builderAmount(1000, 'military-science-pack', self.assembler3, self.pm3v, self.pm3v, self.pm3v, self.pm3v, 8,self.sm3v, self.sm3v, self.pm3p, self.pm3p, self.pm3p, self.pm3p)
+        ab = self.builderFullBelt(self.blueBelt, 'copper-cable', self.assembler3, self.pm3v, self.pm3v, self.pm3v, self.pm3v, 8,self.sm3v, self.sm3v, self.pm3p, self.pm3p, self.pm3p, self.pm3p)
+        return ab
         # return boostpr
 
 if __name__ == "__main__":
