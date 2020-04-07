@@ -17,6 +17,8 @@ class Application(tk.Frame):
 #        self.pack()
         self.create_variables()
         self.create_widgets()
+        self.updater()
+
 
     def create_variables(self):
         self.choices = [ 'Pizza','Lasagne','Fries','Fish','Potatoe']
@@ -59,15 +61,18 @@ class Application(tk.Frame):
         self.DropMenu.grid(row = 2, column = 1,sticky="e")
 #        self.DropMenu.pack(side="left")
         
-
         self.text2 = tk.Label(self, textvariable=self.textvar).grid(row = 2, column = 2, sticky="e")
-
 
         self.quit = tk.Button(self, text="QUIT", fg="red",
                               command=self.master.destroy)
         self.quit.grid(row = 3, column = 3,sticky="e")
 #        self.quit.pack(side="left")
 
+    def updater(self):
+        # updater gets called every 500 msec
+        print("updater")
+
+        root.after(500, self.updater)
 
 
     def add_column(self):
