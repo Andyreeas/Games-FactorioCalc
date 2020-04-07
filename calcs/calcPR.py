@@ -107,7 +107,7 @@ class calcTime():
     def beaconBoostPR(self, number, smXv1, smXv2):
         '''
         To calculate the boost of beacon's
-        return float pr%
+        @return float pr%
         '''
         i = 0
         boost = 0
