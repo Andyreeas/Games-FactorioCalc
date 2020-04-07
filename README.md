@@ -1,6 +1,4 @@
 # Games-FactorioCalc
-
-Factorio Calculator
 ![Image of Yaktocat](/images/Factorio_400x400.png)
 
 # Backend
@@ -12,7 +10,7 @@ From lua/extract_recipies.lua
 
 source(https://www.reddit.com/r/factorio/comments/69h6wd/question_recipes_data/)
 
-###Results:
+Results:
 C:\Users\YOUR_NAME\AppData\Roaming\Factorio\script-output\recipies.txt
 
 ## Convert txt file
