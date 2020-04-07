@@ -7,7 +7,7 @@ Created on Sun Apr  5 01:41:41 2020
 
 from getValues import getValues
 
-class calcTime():
+class calcPR():
     
     '''
     Variabels for Modules
@@ -16,28 +16,17 @@ class calcTime():
         # Connection to DataBase
         self.db = getValues()
         
-        # speed-modul (v=speed increas) (e=electricity increas)
+        # speed-modul (v=speed increas)
         self.sm1v = 0.2
-        self.sm1e = 0.5
         self.sm2v = 0.3
-        self.sm2e = 0.6
         self.sm3v = 0.5
-        self.sm3e = 0.7
-        
-        # electricity-modul (e=electricity increas)
-        self.em1e = -0.3
-        self.em2e = -0.4
-        self.em3e = -0.5
         
         # productivity-modul (v=speed increas) (e=electricity increas) (p=productivity increas)
         self.pm1v = -0.15
-        self.pm1e = 0.4
         self.pm1p = 0.04
         self.pm2v = -0.15
-        self.pm2e = 0.6
         self.pm2p = 0.06
         self.pm3v = -0.15
-        self.pm3e = 0.8
         self.pm3p = 0.10
         
         # production rate
@@ -123,24 +112,6 @@ class calcTime():
         pd = 1 + pmXp1 + pmXp2 + pmXp3 + pmXp4
         return pd
         
-    def power():
-        '''
-        TODO --> To calculate the Power usage
-        '''
-        pass
-    
-    def builderPU():
-        '''
-        TODO --> To calculate the Power usage of the builder
-        '''
-        pass
-    
-    def beaconBoostPU():
-        '''
-        TODO --> To calculate the Power usage with Beacon's
-        '''
-        pass
-        
     '''
     # Testing Area
     # 
@@ -160,7 +131,7 @@ class calcTime():
         # return boostpr
 
 if __name__ == "__main__":
-    a = calcTime()
+    a = calcPR()
     print(a.main())
 
        
