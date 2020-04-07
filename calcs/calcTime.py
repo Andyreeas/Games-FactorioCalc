@@ -53,18 +53,34 @@ class calcTime():
         self.furnace1 = 1
         self.furnace2 = 2
         self.efurnace = 2
+        
+        self.yellowBelt = 15
+        self.redBelt = 30
+        self.blueBelt = 45
 
     def builderAmount(self, itemsneededperMinute, item, builder, smXv1, smXv2, smXv3, smXv4, number, beasmXv1, beasmXv2, pmXp1, pmXp2, pmXp3, pmXp4):
-        ipm = self.itemsPerMinute(item, builder, smXv1, smXv2, smXv3, smXv4, number, beasmXv1, beasmXv2, pmXp1, pmXp2, pmXp3, pmXp4)
-        amountBuilder = itemsneededperMinute / ipm
+        '''
+        returns Amount of Builders needed to produce itemsneededperMinute
+        '''
+        ips = self.itemsPerSecond(item, builder, smXv1, smXv2, smXv3, smXv4, number, beasmXv1, beasmXv2, pmXp1, pmXp2, pmXp3, pmXp4)
+        amountBuilder = itemsneededperMinute / (ips * 60)
         return amountBuilder
-
-    def itemsPerMinute(self, item, builder, smXv1, smXv2, smXv3, smXv4, number, beasmXv1, beasmXv2, pmXp1, pmXp2, pmXp3, pmXp4):
+    
+    def builderFullBelt(self, belt, item, builder, smXv1, smXv2, smXv3, smXv4, number, beasmXv1, beasmXv2, pmXp1, pmXp2, pmXp3, pmXp4):
+        '''
+        returns Amount of Builders needed to fill specific Belt
+        param int belt
+        '''
+        ips = self.itemsPerSecond(item, builder, smXv1, smXv2, smXv3, smXv4, number, beasmXv1, beasmXv2, pmXp1, pmXp2, pmXp3, pmXp4)
+        amountBuilder = belt / ips
+        return amountBuilder
+    
+    def itemsPerSecond(self, item, builder, smXv1, smXv2, smXv3, smXv4, number, beasmXv1, beasmXv2, pmXp1, pmXp2, pmXp3, pmXp4):
         time = self.time(item, builder, smXv1, smXv2, smXv3, smXv4, number, beasmXv1, beasmXv2)
         amount = self.db.getAmount(item)
         ipm = float(amount[1]) / time
         ipm = ipm * self.builderPD(pmXp1, pmXp2, pmXp3, pmXp4)
-        return ipm * 60
+        return ipm
 
     def time(self, item, builder, smXv1, smXv2, smXv3, smXv4, number, beasmXv1, beasmXv2):
         '''
@@ -136,9 +152,10 @@ class calcTime():
         # print(self.time('advanced-circuit', 'true', self.assembler3))
         # pr = self.builderPR(self.assembler3, self.sm3v, self.sm3v, self.sm3v, self.sm3v)
         # time = self.time('accumulator', self.assembler3, self.pm3v, self.pm3v, self.pm3v, self.pm3v, 4,self.sm3v, self.sm3v)
-        # ipm = self.itemsPerMinute('accumulator', self.assembler3, self.pm3v, self.pm3v, self.pm3v, self.pm3v, 8,self.sm3v, self.sm3v, self.pm3p, self.pm3p, self.pm3p, self.pm3p)
+        # ipm = self.itemsPerSecond('accumulator', self.assembler3, self.pm3v, self.pm3v, self.pm3v, self.pm3v, 8,self.sm3v, self.sm3v, self.pm3p, self.pm3p, self.pm3p, self.pm3p)
         # boostpr = self.beaconBoostPR(4, self.sm3v, self.sm3v)
-        ab = self.builderAmount(1000, 'automation-science-pack', self.assembler3, self.pm3v, self.pm3v, self.pm3v, self.pm3v, 8,self.sm3v, self.sm3v, self.pm3p, self.pm3p, self.pm3p, self.pm3p)
+        # ab = self.builderAmount(1000, 'military-science-pack', self.assembler3, self.pm3v, self.pm3v, self.pm3v, self.pm3v, 8,self.sm3v, self.sm3v, self.pm3p, self.pm3p, self.pm3p, self.pm3p)
+        ab = self.builderFullBelt(self.blueBelt, 'copper-cable', self.assembler3, self.pm3v, self.pm3v, self.pm3v, self.pm3v, 8,self.sm3v, self.sm3v, self.pm3p, self.pm3p, self.pm3p, self.pm3p)
         return ab
         # return boostpr
 
