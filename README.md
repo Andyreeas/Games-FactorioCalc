@@ -24,5 +24,7 @@ GUI with Tkinter
 
 ## Calculations
 DONE	Time to craft an Item include speed/ productivity modules 
-DONE	Number of assemblers needed to fill the Belt (#Assembling time) 
+
+DONE	Number of assemblers needed to fill the Belt (#Assembling time)
+
 DONE	Number of assemblers needed to produce specific Items per Second
