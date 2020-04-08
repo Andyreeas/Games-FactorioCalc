@@ -31,13 +31,13 @@ class Application(tk.Frame):
         self.master = master
         # -------------------------------
         # Create a new Frame
-        self.menue_top = tk.Frame(root, width=300)
+        self.menue_top = tk.Frame(root, width=700,height=300)
         self.menue_top.grid(row=0, column=0, sticky="nsew")
         self.menue_top.pack(pady = 30, padx = 30)
-        # Configure Column "5", min. size 
+        # Configure Column "3,9", min. size 
         self.menue_top.columnconfigure(3,minsize=10, weight = 1)
         self.menue_top.columnconfigure(9,minsize=30, weight = 1) 
-        self.menue_top.rowconfigure(0, weight = 1) #grid setting
+        self.menue_top.rowconfigure(0) #grid setting
         # -------------------------------
         # Load variables and create all widgets
         self.load_variables()
@@ -86,6 +86,10 @@ class Application(tk.Frame):
         # -------------------------------
            # list_item_time_var holds the "time" value of the corresponding "list_dropvar"
         self.search_key = tk.StringVar()
+        self.belttyp_var = tk.StringVar()
+        self.belttyp_var.set(45.0)
+        self.montagetyp_var = tk.StringVar()
+        self.montagetyp_var.set(1.25)
            # listcount Counter for the Rows
         self.listcount = 3
         
@@ -104,50 +108,48 @@ class Application(tk.Frame):
         self.button_del_row = tk.Button(self.menue_top, text="Lezte Zeile löschen",
                                         fg="red", command=self.del_line).grid(
                                         row = 0, column = 8, columnspan=2, sticky="e")
-        self.quit = tk.Button(self.menue_top, text="QUIT", fg="red",
-                              command=self.master.destroy).grid(
-                              row = 0, column = 10,sticky="e")
+#        self.quit = tk.Button(self.menue_top, text="QUIT", fg="red",
+#                              command=self.master.destroy).grid(
+#                              row = 0, column = 10,sticky="e")
         # -------------------------------
-        self.label_booster = tk.Label(self.menue_top, text="Booster", bg="#dec8c3").grid(
-                                   row = 1, column = 2,columnspan=3, sticky="n")
-        self.label_speed = tk.Label(self.menue_top, text="Speed", bg="#dec8c3").grid(
+        self.label_builder = tk.Label(self.menue_top, text="Builder",).grid(
                                    row = 2, column = 2, sticky="e")
-        self.label_eff = tk.Label(self.menue_top, text="Efficiency", bg="#dec8c3").grid(
+        self.label_belt = tk.Label(self.menue_top, text="Belt",).grid(
                                    row = 2, column = 3, sticky="e")
-        self.label_energy = tk.Label(self.menue_top, text="Energy", bg="#dec8c3").grid(
+        self.label_in_ips = tk.Label(self.menue_top, text="Items/s",).grid(
                                    row = 2, column = 4, sticky="e")
+        self.label_booster = tk.Label(self.menue_top, text="Booster", bg="#dec8c3").grid(
+                                   row = 2, column = 5,columnspan=4, sticky="n")
         # -------------------------------
-        self.label_booster_bea = tk.Label(self.menue_top, text="Booster Beacon", bg="#c3cade").grid(
-                                   row = 1, column = 5,columnspan=3, sticky="n")
-        self.label_speed_bea = tk.Label(self.menue_top, text="Speed", bg="#c3cade").grid(
-                                   row = 2, column = 5, sticky="n")
-        self.label_eff_bea = tk.Label(self.menue_top, text="Efficiency", bg="#c3cade").grid(
-                                   row = 2, column = 6, sticky="e")
-        self.label_energy_bea = tk.Label(self.menue_top, text="Energy", bg="#c3cade").grid(
-                                   row = 2, column = 7, sticky="e")
-        # -------------------------------
-        self.label_in_ipm = tk.Label(self.menue_top, text="Items/min").grid(
-                                   row = 2, column = 8, sticky="n")
-        # -------------------------------
-        self.label_out_ips = tk.Label(self.menue_top, text="Items/sec").grid(
+        self.label_bea = tk.Label(self.menue_top, text="Beacon", bg="#c3cade").grid(
+                                   row = 2, column = 9, sticky="n")
+        self.label_count_bea = tk.Label(self.menue_top, text="Anzahl",).grid(
                                    row = 2, column = 10, sticky="n")
-        self.label_out_fullb = tk.Label(self.menue_top, text="full belt").grid(
-                                   row = 2, column = 11, sticky="n")
-        self.label_time = tk.Label(self.menue_top, text="Time").grid(
-                                   row = 2, column = 12, sticky="e")
         # -------------------------------
+        self.label_out_ips = tk.Label(self.menue_top, text="Items/s").grid(
+                                   row = 2, column = 13, sticky="n")
+        # -------------------------------
+        self.label_full_belt = tk.Label(self.menue_top, text="full belt").grid(
+                                   row = 2, column = 14, sticky="n")
+        self.label_am_builder = tk.Label(self.menue_top, text="Amount Builder").grid(
+                                   row = 2, column = 15, sticky="n")
+#        self.label_time = tk.Label(self.menue_top, text="Time").grid(
+#                                   row = 2, column = 12, sticky="e")
+        # -------------------------------
+        
         # First initial row
         self.add_line()
         # -------------------------------
 
-
+        
 
     def updater(self):
         # updates the text Labels
         #print("updater")
-        for i in range(self.listcount -3):
-#            self.list_item_time[i].config(text=self.db.getTime(self.list_dropvar[i].get()))
-            self.list_fullb[i].config(text=self.pr.builderFullBelt(45, self.list_dropvar[-1].get(),1.25, 0,0,0,0,0,0,0,0,0,0,0,))
+#       for i in range(self.listcount -3):
+#            self.list_fullb[i].config(text=self.pr.builderFullBelt(float(self.belttyp_var.get()), self.list_dropvar[i].get(), float(self.montagetyp_var.get()),
+#                                                                  0,0,0,0,0,0,0,0,0,0,0,))
+        
         root.after(500, self.updater)
 
 
@@ -173,16 +175,15 @@ class Application(tk.Frame):
         self.list_speed_v.append(tk.StringVar())
         self.list_speed.append(tk.Entry(self.menue_top, textvariable=self.list_speed_v,width=2).grid(
                                         row = self.listcount, column = 2, sticky="n"))
-        self.list_eff.append(tk.StringVar())
+        self.list_eff_v.append(tk.StringVar())
         self.list_eff.append(tk.Entry(self.menue_top, textvariable=self.list_eff_v,width=2).grid(
                                       row = self.listcount, column = 3, sticky="n"))
 
 
         # -------------------------------
         # Output Lists
-        self.list_fullb.append(tk.Label(self.menue_top, text=self.pr.builderFullBelt(45, self.list_dropvar[-1].get(),1.25, 0,0,0,0,0,0,0,0,0,0,0,)))
-                                            
-        self.list_fullb[-1].grid(row = self.listcount, column = 11, sticky="n")
+#        self.list_fullb.append(tk.Label(self.menue_top, text=self.pr.builderFullBelt(float(self.belttyp_var.get()), self.list_dropvar[-1].get(),float(self.montagetyp_var.get()), 0,0,0,0,0,0,0,0,0,0,0,)))                                            
+#        self.list_fullb[-1].grid(row = self.listcount, column = 11, sticky="n")
 
         # -------------------------------
         self.listcount += 1
@@ -220,6 +221,11 @@ class Application(tk.Frame):
             self.choices = self.db_list
         self.add_line()
                 
+    def get_Module(self,row):
+        #Returns the Modules as readable args for calcPR
+        pass
+
+
 
 
 root = tk.Tk()
