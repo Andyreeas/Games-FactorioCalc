@@ -1,10 +1,6 @@
 # Import
 import tkinter as tk 
 #Extend Path, for Importing Module in Parent
-#import os,sys,inspect
-#current_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
-#parent_dir = os.path.dirname(current_dir)
-# sys.path.insert(0, parent_dir) 
 # Import from folder calcs
 from calcs import getValues
 from calcs import calcPR
@@ -15,11 +11,6 @@ from calcs import calcPR
 # ref grid/frame https://stackoverflow.com/questions/36506152/tkinter-grid-or-pack-inside-a-grid
 
 
-#To Do
-# Button pro Line für Delete
-# Del Button bei leerer Liste
-# Stardarts für Fliesband, Montage-geschwindigkeit
-# Ungerade Indexe bei listen von Calc => Wert
 
 
 
@@ -54,33 +45,29 @@ class Application(tk.Frame):
         self.db_list = self.db.getAllItemNames()
            # choices defines de dropdownmenu list
         self.choices = self.db_list
+        self.choices_modules = ["","Speed 1","Speed 2","Speed 3","Productivity 1","Productivity 2","Productivity 3",]
+        self.choices_builder = ["Assembler 1","Assembler 2","Assembler 3","Furnance 1","Furnance 2,E","Chemicalplant","Raffinery","Centrifuge","Oilpump",]
+        self.choices_belt = ["Yellow","Red","Blue",]
            # list_dropvar holds the active value from the dropdownmenu
         self.list_dropvar = [] 
            # list_dropmenu holds all the dropmenu widgets, [0] equals row"3"
         self.list_dropmenu = []
         # -------------------------------
         # INPUT LISTS
-        self.list_speed = []
-        self.list_speed_v = []
-        self.list_eff = []
-        self.list_eff_v = []
-        self.list_energy = []
-        self.list_energy_v = []
-        self.list_speed_bea = []
-        self.list_speed_bea_V = []
-        self.list_eff_bea = []
-        self.list_eff_bea_V = []
-        self.list_energy_bea = []
-        self.list_energy_bea_V = []
-        self.lsit_ipm_in = []
-        self.lsit_ipm_in_V = []
+        # List are 2-D, [i][0]: dropvar, [i][1]: dropmenu
+        self.list_builder = []
+        self.list_belt = []
+        self.list_ips_in = []
+        self.list_booster_1 = []
+        self.list_booster_2 = []
+        self.list_booster_3 = []
+        self.list_booster_4 = []
+        self.list_b_booster_1 = []
+        self.list_b_booster_am = []
+        self.list_var_sum = []
         # -------------------------------
         # OUTPUT LISTS
-           # list_item_time holds all the Label widgets for "time"
-#        self.list_item_time = []
-
-        #self.list_ips_out = []
-        self.list_fullb = []
+        self.list_fullbelt = []
         self.list_buildam = []
 
         # -------------------------------
@@ -91,7 +78,7 @@ class Application(tk.Frame):
         self.montagetyp_var = tk.StringVar()
         self.montagetyp_var.set(1.25)
            # listcount Counter for the Rows
-        self.listcount = 3
+        self.rowcount = 3
         
         
     def create_widgets(self):
@@ -104,7 +91,7 @@ class Application(tk.Frame):
                                   row = 0, column = 3,columnspan=2, sticky="e")
         self.button_go_search = tk.Button(self.menue_top, text="Suche in neuer Zeile",
                                           command=self.search_engine).grid(
-                                          row = 0, column = 5,columnspan=3, sticky="e")
+                                          row = 0, column = 5,columnspan=3, sticky="w")
         self.button_del_row = tk.Button(self.menue_top, text="Lezte Zeile löschen",
                                         fg="red", command=self.del_line).grid(
                                         row = 0, column = 8, columnspan=2, sticky="e")
@@ -113,17 +100,18 @@ class Application(tk.Frame):
 #                              row = 0, column = 10,sticky="e")
         # -------------------------------
         self.label_builder = tk.Label(self.menue_top, text="Builder",).grid(
-                                   row = 2, column = 2, sticky="e")
+                                   row = 2, column = 2, sticky="n")
         self.label_belt = tk.Label(self.menue_top, text="Belt",).grid(
-                                   row = 2, column = 3, sticky="e")
+                                   row = 2, column = 3, sticky="n")
         self.label_in_ips = tk.Label(self.menue_top, text="Items/s",).grid(
-                                   row = 2, column = 4, sticky="e")
-        self.label_booster = tk.Label(self.menue_top, text="Booster", bg="#dec8c3").grid(
-                                   row = 2, column = 5,columnspan=4, sticky="n")
+                                   row = 2, column = 4, sticky="n")
+        self.label_booster = tk.Label(self.menue_top, 
+             text="                             Booster                             ",
+                bg="#dec8c3").grid(row = 2, column = 5,columnspan=4, sticky="n")
         # -------------------------------
         self.label_bea = tk.Label(self.menue_top, text="Beacon", bg="#c3cade").grid(
                                    row = 2, column = 9, sticky="n")
-        self.label_count_bea = tk.Label(self.menue_top, text="Anzahl",).grid(
+        self.label_count_bea = tk.Label(self.menue_top, text="Anzahl", bg="#c3cade").grid(
                                    row = 2, column = 10, sticky="n")
         # -------------------------------
         self.label_out_ips = tk.Label(self.menue_top, text="Items/s").grid(
@@ -133,10 +121,7 @@ class Application(tk.Frame):
                                    row = 2, column = 14, sticky="n")
         self.label_am_builder = tk.Label(self.menue_top, text="Amount Builder").grid(
                                    row = 2, column = 15, sticky="n")
-#        self.label_time = tk.Label(self.menue_top, text="Time").grid(
-#                                   row = 2, column = 12, sticky="e")
         # -------------------------------
-        
         # First initial row
         self.add_line()
         # -------------------------------
@@ -146,47 +131,121 @@ class Application(tk.Frame):
     def updater(self):
         # updates the text Labels
         #print("updater")
-#       for i in range(self.listcount -3):
+        for i in range(self.rowcount -3):
+            # For Calcs, bsp: ['Assembler 1', 'Yellow', '12', 'Speed 3', 'Speed 3', 'Speed 2', 'Speed 1', 'Speed 3', '1']
+            self.list_var_sum[i] = [self.list_builder[i][0].get(),
+                                   self.list_belt[i][0].get(),
+                                   self.list_ips_in[i][0].get(),
+                                   self.list_booster_1[i][0].get(),
+                                   self.list_booster_2[i][0].get(),
+                                   self.list_booster_3[i][0].get(),
+                                   self.list_booster_4[i][0].get(),
+                                   self.list_b_booster_1[i][0].get(),
+                                   self.list_b_booster_am[i][0].get()]
+            print(self.list_var_sum[i])
 #            self.list_fullb[i].config(text=self.pr.builderFullBelt(float(self.belttyp_var.get()), self.list_dropvar[i].get(), float(self.montagetyp_var.get()),
 #                                                                  0,0,0,0,0,0,0,0,0,0,0,))
-        
+            self.list_fullbelt[i][1].config(text="test" )
+            self.list_buildam[i][1].config(text="test3" )
+
+
         root.after(500, self.updater)
 
 
 
     def add_line(self):
+        cline = self.rowcount -3
         # Adds a new row with:
         # list_dropvar initialized as a StringVar, and set value to first in choices
         self.list_dropvar.append(tk.StringVar())
         try:
-            self.list_dropvar[self.listcount -3].set(self.choices[0])
+            self.list_dropvar[cline].set(self.choices[0])
         except:
-            self.list_dropvar[self.listcount -3].set("Kein Eintrag")
+            self.list_dropvar[cline].set("Kein Eintrag")
         # -------------------------------
         #Label-Widget for the list_item_time_var
 #        self.list_item_time.append(tk.Label(self.menue_top, text=self.db.getTime(self.list_dropvar[-1].get())))
-#        self.list_item_time[-1].grid( row = self.listcount, column = 12, sticky="w")
-        # Creates dropdownmenu. #Eintrag [0] ist text2 (self.listcount: 2)
+#        self.list_item_time[-1].grid( row = self.rowcount, column = 12, sticky="w")
+        # Creates dropdownmenu. #Eintrag [0] ist text2 (self.rowcount: 2)
         self.list_dropmenu.append(tk.OptionMenu(self.menue_top, self.list_dropvar[-1],
                                                 *self.choices if not self.choices == [] else "" ))
-        self.list_dropmenu[-1].grid(row = self.listcount, column = 1,sticky="w")
+        self.list_dropmenu[-1].grid(row = self.rowcount, column = 1,sticky="e")
         # -------------------------------
         # Input Lists
-        self.list_speed_v.append(tk.StringVar())
-        self.list_speed.append(tk.Entry(self.menue_top, textvariable=self.list_speed_v,width=2).grid(
-                                        row = self.listcount, column = 2, sticky="n"))
-        self.list_eff_v.append(tk.StringVar())
-        self.list_eff.append(tk.Entry(self.menue_top, textvariable=self.list_eff_v,width=2).grid(
-                                      row = self.listcount, column = 3, sticky="n"))
-
-
+        # Steps: 1. Add new listentry, 2. [i][0]: Variable, 3. Setting to Choice, 4. [i][1]: Widget, 5. Grid
+        self.list_builder.append([])
+        self.list_builder[cline].append(tk.StringVar())
+        self.list_builder[cline][0].set(self.choices_builder[0])
+        self.list_builder[cline].append(tk.OptionMenu(self.menue_top, self.list_builder[cline][0],
+                                                     *self.choices_builder))
+        self.list_builder[cline][1].grid(row = self.rowcount, column = 2, sticky="n")
+        # -
+        self.list_belt.append([])
+        self.list_belt[cline].append(tk.StringVar())
+        self.list_belt[cline][0].set(self.choices_belt[0])
+        self.list_belt[cline].append(tk.OptionMenu(self.menue_top, self.list_belt[cline][0],
+                                                     *self.choices_belt))
+        self.list_belt[cline][1].grid(row = self.rowcount, column = 3, sticky="n")
+        # -
+        self.list_ips_in.append([])
+        self.list_ips_in[cline].append(tk.StringVar())
+        self.list_ips_in[cline].append(tk.Entry(self.menue_top, textvariable=self.list_ips_in[cline][0], width=2))
+        self.list_ips_in[cline][1].grid(row = self.rowcount, column = 4, sticky="n")
+        # -
+        self.list_booster_1.append([])
+        self.list_booster_1[cline].append(tk.StringVar())
+        self.list_booster_1[cline][0].set(self.choices_modules[0])
+        self.list_booster_1[cline].append(tk.OptionMenu(self.menue_top, self.list_booster_1[cline][0],
+                                                     *self.choices_modules))
+        self.list_booster_1[cline][1].grid(row = self.rowcount, column = 5, sticky="n")
+        # -
+        self.list_booster_2.append([])
+        self.list_booster_2[cline].append(tk.StringVar())
+        self.list_booster_2[cline][0].set(self.choices_modules[0])
+        self.list_booster_2[cline].append(tk.OptionMenu(self.menue_top, self.list_booster_2[cline][0],
+                                                     *self.choices_modules))
+        self.list_booster_2[cline][1].grid(row = self.rowcount, column = 6, sticky="n")
+        # -
+        self.list_booster_3.append([])
+        self.list_booster_3[cline].append(tk.StringVar())
+        self.list_booster_3[cline][0].set(self.choices_modules[0])
+        self.list_booster_3[cline].append(tk.OptionMenu(self.menue_top, self.list_booster_3[cline][0],
+                                                     *self.choices_modules))
+        self.list_booster_3[cline][1].grid(row = self.rowcount, column = 7, sticky="n")
+        # -
+        self.list_booster_4.append([])
+        self.list_booster_4[cline].append(tk.StringVar())
+        self.list_booster_4[cline][0].set(self.choices_modules[0])
+        self.list_booster_4[cline].append(tk.OptionMenu(self.menue_top, self.list_booster_4[cline][0],
+                                                     *self.choices_modules))
+        self.list_booster_4[cline][1].grid(row = self.rowcount, column = 8, sticky="n")
+        # -
+        self.list_b_booster_1.append([])
+        self.list_b_booster_1[cline].append(tk.StringVar())
+        self.list_b_booster_1[cline][0].set(self.choices_modules[0])
+        self.list_b_booster_1[cline].append(tk.OptionMenu(self.menue_top, self.list_b_booster_1[cline][0],
+                                                     *self.choices_modules))
+        self.list_b_booster_1[cline][1].grid(row = self.rowcount, column = 9, sticky="n")
+        # -
+        self.list_b_booster_am.append([])
+        self.list_b_booster_am[cline].append(tk.StringVar())
+        self.list_b_booster_am[cline].append(tk.Entry(self.menue_top, textvariable=self.list_b_booster_am[cline][0], width=2))
+        self.list_b_booster_am[cline][1].grid(row = self.rowcount, column = 10, sticky="n")
+        # -
+        self.list_var_sum.append([])
         # -------------------------------
         # Output Lists
-#        self.list_fullb.append(tk.Label(self.menue_top, text=self.pr.builderFullBelt(float(self.belttyp_var.get()), self.list_dropvar[-1].get(),float(self.montagetyp_var.get()), 0,0,0,0,0,0,0,0,0,0,0,)))                                            
-#        self.list_fullb[-1].grid(row = self.listcount, column = 11, sticky="n")
+        self.list_fullbelt.append([])
+        self.list_fullbelt[cline].append(tk.StringVar())
+        self.list_fullbelt[cline].append(tk.Label(self.menue_top, text=self.list_fullbelt[cline][0].get()))                                            
+        self.list_fullbelt[cline][1].grid(row = self.rowcount, column = 14, sticky="n")
+        # -
+        self.list_buildam.append([])
+        self.list_buildam[cline].append(tk.StringVar())
+        self.list_buildam[cline].append(tk.Label(self.menue_top, text=self.list_buildam[cline][0].get()))                                            
+        self.list_buildam[cline][1].grid(row = self.rowcount, column = 15, sticky="n")
 
-        # -------------------------------
-        self.listcount += 1
+        self.rowcount += 1
         
 
 
@@ -195,13 +254,37 @@ class Application(tk.Frame):
 
     def del_line(self):
         #Deletes the Widget and .pop the list
-        if self.listcount > 3:
-            self.list_item_time[-1].grid_forget()
-            self.list_item_time.pop()
+        if self.rowcount > 3:
             self.list_dropvar.pop(-1)
             self.list_dropmenu[-1].grid_forget()
             self.list_dropmenu.pop()
-            self.listcount -= 1
+            # -
+            self.list_builder[-1][1].grid_forget()
+            self.list_builder.pop()
+            self.list_belt[-1][1].grid_forget()
+            self.list_belt.pop()
+            self.list_ips_in[-1][1].grid_forget()
+            self.list_ips_in.pop()
+            self.list_booster_1[-1][1].grid_forget()
+            self.list_booster_1.pop()
+            self.list_booster_2[-1][1].grid_forget()
+            self.list_booster_2.pop()
+            self.list_booster_3[-1][1].grid_forget()
+            self.list_booster_3.pop()
+            self.list_booster_4[-1][1].grid_forget()
+            self.list_booster_4.pop()
+            self.list_b_booster_1[-1][1].grid_forget()
+            self.list_b_booster_1.pop()
+            self.list_b_booster_am[-1][1].grid_forget()
+            self.list_b_booster_am.pop()
+            # -
+            self.list_var_sum.pop()
+            # -
+            self.list_fullbelt[-1][1].grid_forget()
+            self.list_fullbelt.pop()
+            self.list_buildam[-1][1].grid_forget()
+            self.list_buildam.pop()
+            self.rowcount -= 1
 
         else:
             print("nothing to delete")
