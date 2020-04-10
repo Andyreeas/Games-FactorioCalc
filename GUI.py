@@ -11,7 +11,8 @@ from calcs import calcPR
 # ref grid/frame https://stackoverflow.com/questions/36506152/tkinter-grid-or-pack-inside-a-grid
 
 
-
+#To Do:
+# - True deleting system. Right now, only widgets get removed (.grid_forget()). Lists continue with "rowcount". PERFORMANCE?
 
 
 
@@ -53,6 +54,7 @@ class Application(tk.Frame):
            # list_dropmenu holds all the dropmenu widgets, [0] equals row"3"
         self.list_dropmenu = []
         # -------------------------------
+        self.list_del_button = []
         # INPUT LISTS
         # List are 2-D, [i][0]: dropvar, [i][1]: dropmenu
         self.list_builder = []
@@ -79,8 +81,12 @@ class Application(tk.Frame):
         self.montagetyp_var.set(1.25)
            # listcount Counter for the Rows
         self.rowcount = 3
-        
-        
+        # linecount, counts the actual showed widgets
+        self.linecount = 0
+        # counts the deletions
+        self.delete_count = 0
+
+
     def create_widgets(self):
         print("create_widget")
         # Column label description
@@ -92,9 +98,9 @@ class Application(tk.Frame):
         self.button_go_search = tk.Button(self.menue_top, text="Suche in neuer Zeile",
                                           command=self.search_engine).grid(
                                           row = 0, column = 5,columnspan=3, sticky="w")
-        self.button_del_row = tk.Button(self.menue_top, text="Lezte Zeile löschen",
-                                        fg="red", command=self.del_line).grid(
-                                        row = 0, column = 8, columnspan=2, sticky="e")
+#        self.button_del_row = tk.Button(self.menue_top, text="Lezte Zeile löschen",
+#                                        fg="red", command=self.del_last_line).grid(
+#                                        row = 0, column = 8, columnspan=2, sticky="e")
 #        self.quit = tk.Button(self.menue_top, text="QUIT", fg="red",
 #                              command=self.master.destroy).grid(
 #                              row = 0, column = 10,sticky="e")
@@ -130,7 +136,7 @@ class Application(tk.Frame):
 
     def updater(self):
         # updates the text Labels
-        #print("updater")
+        print("updater, i = ", self.linecount)
         for i in range(self.rowcount -3):
             # For Calcs, bsp: ['Assembler 1', 'Yellow', '12', 'Speed 3', 'Speed 3', 'Speed 2', 'Speed 1', 'Speed 3', '1']
             self.list_var_sum[i] = [self.list_builder[i][0].get(),
@@ -143,10 +149,9 @@ class Application(tk.Frame):
                                    self.list_b_booster_1[i][0].get(),
                                    self.list_b_booster_am[i][0].get()]
             print(self.list_var_sum[i])
-#            self.list_fullb[i].config(text=self.pr.builderFullBelt(float(self.belttyp_var.get()), self.list_dropvar[i].get(), float(self.montagetyp_var.get()),
-#                                                                  0,0,0,0,0,0,0,0,0,0,0,))
-            self.list_fullbelt[i][1].config(text="test" )
-            self.list_buildam[i][1].config(text="test3" )
+
+            self.list_fullbelt[i][1].config(text=("test",i) )
+            self.list_buildam[i][1].config(text=("test",i) )
 
 
         root.after(500, self.updater)
@@ -155,6 +160,7 @@ class Application(tk.Frame):
 
     def add_line(self):
         cline = self.rowcount -3
+        print("Add_line, cline", cline)
         # Adds a new row with:
         # list_dropvar initialized as a StringVar, and set value to first in choices
         self.list_dropvar.append(tk.StringVar())
@@ -170,6 +176,12 @@ class Application(tk.Frame):
         self.list_dropmenu.append(tk.OptionMenu(self.menue_top, self.list_dropvar[-1],
                                                 *self.choices if not self.choices == [] else "" ))
         self.list_dropmenu[-1].grid(row = self.rowcount, column = 1,sticky="e")
+
+        # -------------------------------
+        # del Button
+        self.list_del_button.append(tk.Button(self.menue_top, text="X", fg="red",
+                                          command=lambda row=cline: self.del_row_line(row)))
+        self.list_del_button[cline].grid(row = self.rowcount, column = 0, sticky="w")
         # -------------------------------
         # Input Lists
         # Steps: 1. Add new listentry, 2. [i][0]: Variable, 3. Setting to Choice, 4. [i][1]: Widget, 5. Grid
@@ -246,46 +258,49 @@ class Application(tk.Frame):
         self.list_buildam[cline][1].grid(row = self.rowcount, column = 15, sticky="n")
 
         self.rowcount += 1
-        
+        self.linecount += 1
 
 
 
     
 
-    def del_line(self):
-        #Deletes the Widget and .pop the list
+    def del_last_line(self):
+        #Deletes the LAST Widget and .pop the list
         if self.rowcount > 3:
-            self.list_dropvar.pop(-1)
+            self.list_del_button[-1].grid_forget()
+#            self.list_del_button.pop()
+            # -
+ #           self.list_dropvar.pop(-1)
             self.list_dropmenu[-1].grid_forget()
-            self.list_dropmenu.pop()
+#            self.list_dropmenu.pop()
             # -
             self.list_builder[-1][1].grid_forget()
-            self.list_builder.pop()
+#            self.list_builder.pop()
             self.list_belt[-1][1].grid_forget()
-            self.list_belt.pop()
+#            self.list_belt.pop()
             self.list_ips_in[-1][1].grid_forget()
-            self.list_ips_in.pop()
+#            self.list_ips_in.pop()
             self.list_booster_1[-1][1].grid_forget()
-            self.list_booster_1.pop()
+#            self.list_booster_1.pop()
             self.list_booster_2[-1][1].grid_forget()
-            self.list_booster_2.pop()
+#            self.list_booster_2.pop()
             self.list_booster_3[-1][1].grid_forget()
-            self.list_booster_3.pop()
+#            self.list_booster_3.pop()
             self.list_booster_4[-1][1].grid_forget()
-            self.list_booster_4.pop()
+#            self.list_booster_4.pop()
             self.list_b_booster_1[-1][1].grid_forget()
-            self.list_b_booster_1.pop()
+#            self.list_b_booster_1.pop()
             self.list_b_booster_am[-1][1].grid_forget()
-            self.list_b_booster_am.pop()
+#            self.list_b_booster_am.pop()
             # -
-            self.list_var_sum.pop()
+#            self.list_var_sum.pop()
             # -
             self.list_fullbelt[-1][1].grid_forget()
-            self.list_fullbelt.pop()
+#            self.list_fullbelt.pop()
             self.list_buildam[-1][1].grid_forget()
-            self.list_buildam.pop()
-            self.rowcount -= 1
-
+#            self.list_buildam.pop()
+            self.linecount -= 1
+            self.delete_count += 1
         else:
             print("nothing to delete")
 
@@ -303,11 +318,45 @@ class Application(tk.Frame):
         else:
             self.choices = self.db_list
         self.add_line()
-                
-    def get_Module(self,row):
-        #Returns the Modules as readable args for calcPR
-        pass
+         
+        
+    def del_row_line(self, row):
+        print("del_row_line, row", row)
+        self.list_del_button[row].grid_forget()
+#        self.list_del_button.pop(row)
+        # -
+#        self.list_dropvar.pop(row)
+        self.list_dropmenu[row].grid_forget()
+#        self.list_dropmenu.pop(row)
+        # -
+        self.list_builder[row][1].grid_forget()
+#        self.list_builder.pop(row)
+        self.list_belt[row][1].grid_forget()
+#        self.list_belt.pop(row)
+        self.list_ips_in[row][1].grid_forget()
+#        self.list_ips_in.pop(row)
+        self.list_booster_1[row][1].grid_forget()
+#        self.list_booster_1.pop(row)
+        self.list_booster_2[row][1].grid_forget()
+#        self.list_booster_2.pop(row)
+        self.list_booster_3[row][1].grid_forget()
+#        self.list_booster_3.pop(row)
+        self.list_booster_4[row][1].grid_forget()
+#        self.list_booster_4.pop(row)
+        self.list_b_booster_1[row][1].grid_forget()
+#        self.list_b_booster_1.pop(row)
+        self.list_b_booster_am[row][1].grid_forget()
+#        self.list_b_booster_am.pop(row)
+        # -
+#        self.list_var_sum.pop(row)
+        # -
+        self.list_fullbelt[row][1].grid_forget()
+#        self.list_fullbelt.pop(row)
+        self.list_buildam[row][1].grid_forget()
+#        self.list_buildam.pop(row)
 
+        self.linecount -= 1
+        self.delete_count += 1
 
 
 
