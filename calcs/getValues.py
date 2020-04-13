@@ -17,37 +17,38 @@ class getValues():
     '''
     def __init__(self):
         #Import from GUI
-        database = 'DB/data.json'
+        # dbitems = 'DB/data.json'
+        # dbmodule = 'DB/module.json'
+        # dbpr = 'DB/prBuilder.json'
         #Local Text Import
-        #database = '../DB/data.json'
-
-        self.data = json.loads(open(database).read())
+        dbitems = '../DB/data.json'
+        dbmodule = '../DB/module.json'
+        dbpr = '../DB/prBuilder.json'
+        
+        self.data = json.loads(open(dbitems).read())
+        self.module = json.loads(open(dbmodule).read())
+        self.pr = json.loads(open(dbpr).read())
     
-    '''
-    Outputs whole Json
-    '''
-    def readJson(self):
-        return self.data
     
-    '''
-    @param string item
-    @return integer time
-    '''
     def getTime(self, item):
+        '''
+        @param string item
+        @return integer time
+        '''
         try:
             time = self.data['Items'][item]['time']
             return time
         except KeyError:
-            error = "Item doesn't exist"
+            error = "Time does not exist"
             return error
         
-    '''
-    Returns amount of output
-    index uneven --> value
-    @param string item
-    @return list amount
-    '''
     def getAmount(self, item):
+        '''
+        Returns amount of output
+        index uneven --> value
+        @param string item
+        @return list amount
+        '''
         dict = {}
         try:
             for i in self.data['Items'][item]['amount']:
@@ -58,17 +59,17 @@ class getValues():
                 list.append(dict[i])
             return list
         except KeyError:
-            error = 'Item does not exist'
+            error = 'Amount does not exist'
             return error
     
-    '''
-    Returns Ingredients for Item
-    index uneven --> value
-    index even --> name of ingredient
-    @param string item
-    @return list amount
-    '''
     def getIngredients(self, item):
+        '''
+        Returns Ingredients for Item
+        index uneven --> value
+        index even --> name of ingredient
+        @param string item
+        @return list amount
+        '''
         dict = {}
         try:
             for i in self.data['Items'][item]['Ingredients']:
@@ -79,17 +80,82 @@ class getValues():
                 list.append(dict[i])
             return list
         except KeyError:
-            error = 'Item does not exist'
+            error = 'Ingredients does not exist'
             return error
     
-    '''
-    Returns all item Names
-    @param string item
-    @return list item
-    '''
     def getAllItemNames(self):
+        '''
+        Returns all item Names
+        @return list item
+        '''
         list = []
         for i in self.data['Items']:
             list.append(i)
         return list
+    
+    def getModuleNames(self):
+        '''
+        Returns all Module Names
+        @return list item
+        '''
+        list = []
+        for i in self.module['modules']:
+            list.append(i)
+        return list
+    
+    def getBuilderNames(self):
+        '''
+        Returns all Builder Names
+        @return list item
+        '''
+        list = []
+        for i in self.pr['builders']:
+            list.append(i)
+        return list
+    
+    def getBeltNames(self):
+        '''
+        @return string attribute
+        '''
+        list = []
+        for i in self.pr['belts']:
+            list.append(i)
+        return list
+    
+    def getModuleAttributs(self, module, attribute):
+        '''
+        @param string attribut (speed, energy, productivity)
+        @return string attribute
+        '''
+        try:
+            value = self.module['modules'][module][attribute]
+            return value
+        except KeyError:
+            error = "Module or Attribute does not exist"
+            return error
+        
+    
+    def getBuilderPr(self, builder):
+        '''
+        @param string buildername
+        @return string pr
+        '''
+        try:
+            value = self.pr['builders'][builder]['pr']
+            return value
+        except KeyError:
+            error = "Builder does not exist"
+            return error
+        
+    def getBeltSpeed(self, belt):
+        '''
+        @param string Belt
+        @return string pr
+        '''
+        try:
+            value = self.pr['belts'][belt]['speed']
+            return value
+        except KeyError:
+            error = "Belt does not exist"
+            return error
     
