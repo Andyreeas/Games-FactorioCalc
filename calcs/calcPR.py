@@ -24,6 +24,7 @@ class calcPR():
         returns Amount of Builders needed to produce itemsneededperMinute
         '''
         ips = self.itemsPerSecond(item, builder, module1, module2, module3, module4, beaModule, amountBea)
+        print("IPS",item, builder, module1, module2, module3, module4, beaModule, amountBea)
         amountBuilder = itemsneededperMinute / (ips * 60)
         return amountBuilder
     
@@ -33,7 +34,7 @@ class calcPR():
         param int belt
         '''
         ips = self.itemsPerSecond(item, builder, module1, module2, module3, module4, beaModule, amountBea)
-        belt = db.getBeltSpeed(belt)
+        belt = self.db.getBeltSpeed(belt)
         amountBuilder = belt / ips
         return amountBuilder
     
@@ -42,6 +43,7 @@ class calcPR():
         amount = self.db.getAmount(item)
         ips = float(amount[1]) / time
         ips *= self.moduleProductivityBoost(module1, module2, module3, module4)
+        print("ips NACHHER", ips)
         return ips
 
     def time(self, item, builder, module1, module2, module3, module4, beaModule, amountBea):
@@ -60,23 +62,24 @@ class calcPR():
         @param modules 1 - 4 
         return float pr
         '''
-        builderpr = db.getBuilderPr(builder)
+        builderpr = self.db.getBuilderPr(builder)
         builderpr += (builderpr * self.moduleSpeedBoost(module1, module2, module3, module4))
-        builderpr += (db.getBuilderPr(builder) * self.beaconBoostPR(amountBea, beaModule))
+        builderpr += (self.db.getBuilderPr(builder) * self.beaconBoostPR(amountBea, beaModule))
         return builderpr
     
     def moduleSpeedBoost(self, module1=0, module2=0, module3=0, module4=0):
-        speedBoost = db.getModuleAttribut(module1, 'speed')
-        speedBoost += db.getModuleAttribut(module2, 'speed')
-        speedBoost += db.getModuleAttribut(module3, 'speed')
-        speedBoost += db.getModuleAttribut(module4, 'speed')
+        speedBoost = self.db.getModuleAttribut(module1, 'speed')
+        speedBoost += self.db.getModuleAttribut(module2, 'speed')
+        speedBoost += self.db.getModuleAttribut(module3, 'speed')
+        speedBoost += self.db.getModuleAttribut(module4, 'speed')
         return speedBoost
     
     def moduleProductivityBoost(self, module1, module2, module3, module4):
-        prodBoost = db.getModuleAttribut(module1, 'productivity')
-        prodBoost += db.getModuleAttribut(module2, 'productivity')
-        prodBoost += db.getModuleAttribut(module3, 'productivity')
-        prodBoost += db.getModuleAttribut(module4, 'productivity')
+        prodBoost = 1.0
+        prodBoost += self.db.getModuleAttribut(module1, 'productivity')
+        prodBoost += self.db.getModuleAttribut(module2, 'productivity')
+        prodBoost += self.db.getModuleAttribut(module3, 'productivity')
+        prodBoost += self.db.getModuleAttribut(module4, 'productivity')
         return prodBoost
     
     def beaconBoostPR(self, amount, module):
