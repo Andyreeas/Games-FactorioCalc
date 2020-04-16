@@ -6,9 +6,9 @@ Created on Sun Apr  5 01:41:41 2020
 """
 
 '''RelativeImport for GUI'''
-from .getValues import getValues 
+# from .getValues import getValues 
 '''Import for local test'''
-# from getValues import getValues
+from getValues import getValues
 
 class calcPR():
     
@@ -102,12 +102,12 @@ class calcPR():
     '''
     def main(self):
         # ab = self.moduleProductivityBoost('speed-module-3', 'speed-module-3', 'speed-module-3', 'speed-module-3')
-        # ab = self.builderFullBelt('accumulator', 'assembling-machine-3', 'productivity-module-3', 'productivity-module-3', 'productivity-module-3', 'productivity-module-3', 'speed-module-3', 4)
+        ab = self.builderFullBelt('accumulator', 'assembling-machine-3', 'speed-module-3', 'speed-module-3', 'speed-module-3', 'speed-module-3', 'speed-module-3', 4)
         # ab = self.builderPr('assembling-machine-3', 'productivity-module-3', 'productivity-module-3', 'productivity-module-3', 'productivity-module-3', 'speed-module-3', 4 )
-        # return ab
-        pass
+        return ab
+        # pass
 
 if __name__ == "__main__":
     a = calcPR()
     db = getValues()
-    # print(a.main())
+    print(a.main())
