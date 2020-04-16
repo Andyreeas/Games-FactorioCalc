@@ -46,7 +46,7 @@ class Application(tk.Frame):
         self.db_list = self.db.getAllItemNames()
            # choices defines de dropdownmenu list
         self.choices = self.db_list
-        self.choices_modules = self.db.getModuleNames()
+        self.choices_modules = ["None"] + self.db.getModuleNames()
         self.choices_builder = self.db.getBuilderNames() #["Assembler 1","Assembler 2","Assembler 3","Furnance 1","Furnance 2,E","Chemicalplant","Raffinery","Centrifuge","Oilpump",]
         self.choices_belt = self.db.getBeltNames() #["Yellow","Red","Blue",]
            # list_dropvar holds the active value from the dropdownmenu
@@ -59,7 +59,7 @@ class Application(tk.Frame):
         # List are 2-D, [i][0]: dropvar, [i][1]: dropmenu
         self.list_builder = []
         self.list_belt = []
-        self.list_ips_in = []
+        self.list_ipm_in = []
         self.list_booster_1 = []
         self.list_booster_2 = []
         self.list_booster_3 = []
@@ -109,7 +109,7 @@ class Application(tk.Frame):
                                    row = 2, column = 2, sticky="n")
         self.label_belt = tk.Label(self.menue_top, text="Belt",).grid(
                                    row = 2, column = 3, sticky="n")
-        self.label_in_ips = tk.Label(self.menue_top, text="Items/s",).grid(
+        self.label_in_ipm = tk.Label(self.menue_top, text="Items/min",).grid(
                                    row = 2, column = 4, sticky="n")
         self.label_booster = tk.Label(self.menue_top, 
              text="                             Booster                             ",
@@ -120,7 +120,7 @@ class Application(tk.Frame):
         self.label_count_bea = tk.Label(self.menue_top, text="Anzahl", bg="#c3cade").grid(
                                    row = 2, column = 10, sticky="n")
         # -------------------------------
-        self.label_out_ips = tk.Label(self.menue_top, text="Items/s").grid(
+        self.label_out_ipm = tk.Label(self.menue_top, text="Items/min").grid(
                                    row = 2, column = 13, sticky="n")
         # -------------------------------
         self.label_full_belt = tk.Label(self.menue_top, text="full belt").grid(
@@ -143,11 +143,11 @@ class Application(tk.Frame):
             except ValueError:
                 value_booster_am = 0.
             try:
-                value_ips_in = int(self.list_ips_in[i][0].get())
+                value_ipm_in = int(self.list_ipm_in[i][0].get())
             except ValueError:
-                value_ips_in = 0.
+                value_ipm_in = 0.
 
-            print("ERRROOOORRR___",value_ips_in,
+            print("ERRROOOORRR___",value_ipm_in,
                                                                        self.list_dropvar[i].get(),
                                                                        self.list_builder[i][0].get(),
                                                                        self.list_booster_1[i][0].get(),
@@ -172,7 +172,7 @@ class Application(tk.Frame):
                                                                       )))
 
 
-            self.list_buildam[i][1].config(text=(self.pr.builderAmount(value_ips_in,
+            self.list_buildam[i][1].config(text=(self.pr.builderAmount(value_ipm_in,
                                                                        self.list_dropvar[i].get(),
                                                                        self.list_builder[i][0].get(),
                                                                        self.list_booster_1[i][0].get(),
@@ -229,10 +229,10 @@ class Application(tk.Frame):
                                                      *self.choices_belt))
         self.list_belt[cline][1].grid(row = self.rowcount, column = 3, sticky="n")
         # -
-        self.list_ips_in.append([])
-        self.list_ips_in[cline].append(tk.StringVar())
-        self.list_ips_in[cline].append(tk.Entry(self.menue_top, textvariable=self.list_ips_in[cline][0], width=2))
-        self.list_ips_in[cline][1].grid(row = self.rowcount, column = 4, sticky="n")
+        self.list_ipm_in.append([])
+        self.list_ipm_in[cline].append(tk.StringVar())
+        self.list_ipm_in[cline].append(tk.Entry(self.menue_top, textvariable=self.list_ipm_in[cline][0], width=2))
+        self.list_ipm_in[cline][1].grid(row = self.rowcount, column = 4, sticky="n")
         # -
         self.list_booster_1.append([])
         self.list_booster_1[cline].append(tk.StringVar())
@@ -308,8 +308,8 @@ class Application(tk.Frame):
 #            self.list_builder.pop()
             self.list_belt[-1][1].grid_forget()
 #            self.list_belt.pop()
-            self.list_ips_in[-1][1].grid_forget()
-#            self.list_ips_in.pop()
+            self.list_ipm_in[-1][1].grid_forget()
+#            self.list_ipm_in.pop()
             self.list_booster_1[-1][1].grid_forget()
 #            self.list_booster_1.pop()
             self.list_booster_2[-1][1].grid_forget()
@@ -363,8 +363,8 @@ class Application(tk.Frame):
 #        self.list_builder.pop(row)
         self.list_belt[row][1].grid_forget()
 #        self.list_belt.pop(row)
-        self.list_ips_in[row][1].grid_forget()
-#        self.list_ips_in.pop(row)
+        self.list_ipm_in[row][1].grid_forget()
+#        self.list_ipm_in.pop(row)
         self.list_booster_1[row][1].grid_forget()
 #        self.list_booster_1.pop(row)
         self.list_booster_2[row][1].grid_forget()
