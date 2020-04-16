@@ -112,20 +112,19 @@ class Application(tk.Frame):
         self.label_in_ipm = tk.Label(self.menue_top, text="Items/min",).grid(
                                    row = 2, column = 4, sticky="n")
         self.label_booster = tk.Label(self.menue_top, 
-             text="                             Booster                             ",
-                bg="#dec8c3").grid(row = 2, column = 5,columnspan=4, sticky="n")
+             text="Booster",bg="#dec8c3", width=93).grid(row = 2, column = 5,columnspan=4, sticky="n")
         # -------------------------------
-        self.label_bea = tk.Label(self.menue_top, text="Beacon", bg="#c3cade").grid(
+        self.label_bea = tk.Label(self.menue_top, text="Beacon", bg="#c3cade", width=23).grid(
                                    row = 2, column = 9, sticky="n")
-        self.label_count_bea = tk.Label(self.menue_top, text="Anzahl", bg="#c3cade").grid(
+        self.label_count_bea = tk.Label(self.menue_top, text="Amount", bg="#c3cade", width=6).grid(
                                    row = 2, column = 10, sticky="n")
         # -------------------------------
-        self.label_out_ipm = tk.Label(self.menue_top, text="Items/min").grid(
-                                   row = 2, column = 13, sticky="n")
+#        self.label_out_ipm = tk.Label(self.menue_top, text="Items/min").grid(
+#                                   row = 2, column = 13, sticky="n")
         # -------------------------------
-        self.label_full_belt = tk.Label(self.menue_top, text="full belt").grid(
+        self.label_full_belt = tk.Label(self.menue_top, text="Builder for full belt",bg="#dec8c3", width=15).grid(
                                    row = 2, column = 14, sticky="n")
-        self.label_am_builder = tk.Label(self.menue_top, text="Amount Builder").grid(
+        self.label_am_builder = tk.Label(self.menue_top, text="Amount builder",bg="#c3cade", width=15).grid(
                                    row = 2, column = 15, sticky="n")
         # -------------------------------
         # First initial row
