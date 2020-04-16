@@ -115,6 +115,7 @@ class getValues():
     
     def getBeltNames(self):
         '''
+        Returns all Belt names
         @return string attribute
         '''
         list = []
@@ -122,17 +123,17 @@ class getValues():
             list.append(i)
         return list
     
-    def getModuleAttributs(self, module, attribute):
+    def getModuleAttribut(self, module, attribute):
         '''
         @param string attribut (speed, energy, productivity)
         @return string attribute
         '''
         try:
-            value = self.module['modules'][module][attribute]
+            value = float(self.module['modules'][module][attribute])
             return value
         except KeyError:
-            error = "Module or Attribute does not exist"
-            return error
+            # error = "Module or Attribute does not exist"
+            return 0
         
     
     def getBuilderPr(self, builder):
@@ -141,7 +142,7 @@ class getValues():
         @return string pr
         '''
         try:
-            value = self.pr['builders'][builder]['pr']
+            value = float(self.pr['builders'][builder]['pr'])
             return value
         except KeyError:
             error = "Builder does not exist"
@@ -153,7 +154,7 @@ class getValues():
         @return string pr
         '''
         try:
-            value = self.pr['belts'][belt]['speed']
+            value = float(self.pr['belts'][belt]['speed'])
             return value
         except KeyError:
             error = "Belt does not exist"
