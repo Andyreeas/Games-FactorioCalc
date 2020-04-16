@@ -138,18 +138,6 @@ class Application(tk.Frame):
         # updates the text Labels
         print("updater, i = ", self.linecount)
         for i in range(self.rowcount -3):
-            # For Calcs, bsp: ['Assembler 1', 'Yellow', '12', 'Speed 3', 'Speed 3', 'Speed 2', 'Speed 1', 'Speed 3', '1']
-            self.list_var_sum[i] = [self.list_builder[i][0].get(),
-                                   self.list_belt[i][0].get(),
-                                   self.list_ips_in[i][0].get(),
-                                   self.list_booster_1[i][0].get(),
-                                   self.list_booster_2[i][0].get(),
-                                   self.list_booster_3[i][0].get(),
-                                   self.list_booster_4[i][0].get(),
-                                   self.list_b_booster_1[i][0].get(),
-                                   self.list_b_booster_am[i][0].get()]
-            print(self.list_var_sum[i])
-
             try:
                 value_booster_am = float(self.list_b_booster_am[i][0].get())
             except ValueError:
@@ -171,7 +159,19 @@ class Application(tk.Frame):
 
 
 
-            self.list_fullbelt[i][1].config(text=("test",i) )
+
+            self.list_fullbelt[i][1].config(text=(self.pr.builderFullBelt(self.list_belt[i][0].get(),
+                                                                       self.list_dropvar[i].get(),
+                                                                       self.list_builder[i][0].get(),
+                                                                       self.list_booster_1[i][0].get(),
+                                                                       self.list_booster_2[i][0].get(),
+                                                                       self.list_booster_3[i][0].get(),
+                                                                       self.list_booster_4[i][0].get(),
+                                                                       self.list_b_booster_1[i][0].get(),
+                                                                       value_booster_am,
+                                                                      )))
+
+
             self.list_buildam[i][1].config(text=(self.pr.builderAmount(value_ips_in,
                                                                        self.list_dropvar[i].get(),
                                                                        self.list_builder[i][0].get(),
