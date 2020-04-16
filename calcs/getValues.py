@@ -17,13 +17,13 @@ class getValues():
     '''
     def __init__(self):
         #Import from GUI
-        # dbitems = 'DB/data.json'
-        # dbmodule = 'DB/module.json'
-        # dbpr = 'DB/prBuilder.json'
+        dbitems = 'DB/data.json'
+        dbmodule = 'DB/module.json'
+        dbpr = 'DB/prBuilder.json'
         #Local Text Import
-        dbitems = '../DB/data.json'
-        dbmodule = '../DB/module.json'
-        dbpr = '../DB/prBuilder.json'
+        # dbitems = '../DB/data.json'
+        # dbmodule = '../DB/module.json'
+        # dbpr = '../DB/prBuilder.json'
         
         self.data = json.loads(open(dbitems).read())
         self.module = json.loads(open(dbmodule).read())

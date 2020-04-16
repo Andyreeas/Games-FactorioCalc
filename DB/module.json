@@ -28,13 +28,13 @@
       "speed": "-0.15"
 		},
 		"effectivity-module": {
-			"speed": "-0.3"
+			"power": "-0.3"
 		},
 		"effectivity-module-2": {
-			"speed": "-0.4"
+			"power": "-0.4"
 		},
 		"effectivity-module-3": {
-			"speed": "-0.5"
+			"power": "-0.5"
 		}
 	}
 }

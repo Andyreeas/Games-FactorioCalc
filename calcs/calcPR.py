@@ -6,9 +6,9 @@ Created on Sun Apr  5 01:41:41 2020
 """
 
 '''RelativeImport for GUI'''
-# from .getValues import getValues 
+from .getValues import getValues 
 '''Import for local test'''
-from getValues import getValues
+# from getValues import getValues
 
 class calcPR():
     
@@ -24,7 +24,6 @@ class calcPR():
         returns Amount of Builders needed to produce itemsneededperMinute
         '''
         ips = self.itemsPerSecond(item, builder, module1, module2, module3, module4, beaModule, amountBea)
-        print("IPS",item, builder, module1, module2, module3, module4, beaModule, amountBea)
         amountBuilder = itemsneededperMinute / (ips * 60)
         return amountBuilder
     
@@ -43,7 +42,6 @@ class calcPR():
         amount = self.db.getAmount(item)
         ips = float(amount[1]) / time
         ips *= self.moduleProductivityBoost(module1, module2, module3, module4)
-        print("ips NACHHER", ips)
         return ips
 
     def time(self, item, builder, module1, module2, module3, module4, beaModule, amountBea):
@@ -65,6 +63,7 @@ class calcPR():
         builderpr = self.db.getBuilderPr(builder)
         builderpr += (builderpr * self.moduleSpeedBoost(module1, module2, module3, module4))
         builderpr += (self.db.getBuilderPr(builder) * self.beaconBoostPR(amountBea, beaModule))
+        print(builderpr)
         return builderpr
     
     def moduleSpeedBoost(self, module1=0, module2=0, module3=0, module4=0):
@@ -80,6 +79,7 @@ class calcPR():
         prodBoost += self.db.getModuleAttribut(module2, 'productivity')
         prodBoost += self.db.getModuleAttribut(module3, 'productivity')
         prodBoost += self.db.getModuleAttribut(module4, 'productivity')
+        print(prodBoost)
         return prodBoost
     
     def beaconBoostPR(self, amount, module):
@@ -105,7 +105,7 @@ class calcPR():
     '''
     def main(self):
         # ab = self.moduleProductivityBoost('speed-module-3', 'speed-module-3', 'speed-module-3', 'speed-module-3')
-        ab = self.builderFullBelt('accumulator', 'assembling-machine-3', 'speed-module-3', 'speed-module-3', 'speed-module-3', 'speed-module-3', 'speed-module-3', 4)
+        ab = self.builderFullBelt('express-transport-belt', 'accumulator', 'assembling-machine-3', 'effectivity-module', 'effectivity-module', 'effectivity-module', 'effectivity-module', 'speed-module-3', 0)
         # ab = self.builderPr('assembling-machine-3', 'productivity-module-3', 'productivity-module-3', 'productivity-module-3', 'productivity-module-3', 'speed-module-3', 4 )
         return ab
         # pass
