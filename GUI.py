@@ -13,7 +13,7 @@ from calcs import calcPR
 
 #To Do:
 # - True deleting system. Right now, only widgets get removed (.grid_forget()). Lists continue with "rowcount". PERFORMANCE?
-
+# exeption Input IPM, buchstabe
 
 
 
@@ -46,9 +46,9 @@ class Application(tk.Frame):
         self.db_list = self.db.getAllItemNames()
            # choices defines de dropdownmenu list
         self.choices = self.db_list
-        self.choices_modules = ["","Speed 1","Speed 2","Speed 3","Productivity 1","Productivity 2","Productivity 3",]
-        self.choices_builder = ["Assembler 1","Assembler 2","Assembler 3","Furnance 1","Furnance 2,E","Chemicalplant","Raffinery","Centrifuge","Oilpump",]
-        self.choices_belt = ["Yellow","Red","Blue",]
+        self.choices_modules = self.db.getModuleNames()
+        self.choices_builder = self.db.getBuilderNames() #["Assembler 1","Assembler 2","Assembler 3","Furnance 1","Furnance 2,E","Chemicalplant","Raffinery","Centrifuge","Oilpump",]
+        self.choices_belt = self.db.getBeltNames() #["Yellow","Red","Blue",]
            # list_dropvar holds the active value from the dropdownmenu
         self.list_dropvar = [] 
            # list_dropmenu holds all the dropmenu widgets, [0] equals row"3"
@@ -150,8 +150,38 @@ class Application(tk.Frame):
                                    self.list_b_booster_am[i][0].get()]
             print(self.list_var_sum[i])
 
+            try:
+                value_booster_am = float(self.list_b_booster_am[i][0].get())
+            except ValueError:
+                value_booster_am = 0.
+            try:
+                value_ips_in = int(self.list_ips_in[i][0].get())
+            except ValueError:
+                value_ips_in = 0.
+
+            print("ERRROOOORRR___",value_ips_in,
+                                                                       self.list_dropvar[i].get(),
+                                                                       self.list_builder[i][0].get(),
+                                                                       self.list_booster_1[i][0].get(),
+                                                                       self.list_booster_2[i][0].get(),
+                                                                       self.list_booster_3[i][0].get(),
+                                                                       self.list_booster_4[i][0].get(),
+                                                                       self.list_b_booster_1[i][0].get(),
+                                                                       value_booster_am,)
+
+
+
             self.list_fullbelt[i][1].config(text=("test",i) )
-            self.list_buildam[i][1].config(text=("test",i) )
+            self.list_buildam[i][1].config(text=(self.pr.builderAmount(value_ips_in,
+                                                                       self.list_dropvar[i].get(),
+                                                                       self.list_builder[i][0].get(),
+                                                                       self.list_booster_1[i][0].get(),
+                                                                       self.list_booster_2[i][0].get(),
+                                                                       self.list_booster_3[i][0].get(),
+                                                                       self.list_booster_4[i][0].get(),
+                                                                       self.list_b_booster_1[i][0].get(),
+                                                                       value_booster_am,
+                                                                      )))
 
 
         root.after(500, self.updater)
